@@ -1,0 +1,262 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="HurtowniaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Mieszkania_domy">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="Pesel_w" Type="nchar" MaxLength="11" Nullable="false" />
+          <Property Name="ID" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="Metraz" Type="real" />
+          <Property Name="Miejscowosc" Type="varchar" MaxLength="50" />
+          <Property Name="Kod" Type="nchar" MaxLength="6" />
+          <Property Name="Adres" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Znajomi">
+          <Key>
+            <PropertyRef Name="Pesel" />
+          </Key>
+          <Property Name="Nazwisko" Type="varchar" MaxLength="30" />
+          <Property Name="Imie" Type="varchar" MaxLength="25" />
+          <Property Name="Pesel" Type="nchar" MaxLength="11" Nullable="false" />
+          <Property Name="Data_urodzenia" Type="date" />
+          <Property Name="Majatek" Type="money" />
+          <Property Name="Miasto" Type="nvarchar" MaxLength="30" />
+        </EntityType>
+        <Association Name="FK_Mieszkania_domy_Znajomi">
+          <End Role="Znajomi" Type="Self.Znajomi" Multiplicity="1" />
+          <End Role="Mieszkania_domy" Type="Self.Mieszkania_domy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Znajomi">
+              <PropertyRef Name="Pesel" />
+            </Principal>
+            <Dependent Role="Mieszkania_domy">
+              <PropertyRef Name="Pesel_w" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="CalculateCircleArea" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="float">
+          <Parameter Name="Promień" Type="float" Mode="In" />
+        </Function>
+        <Function Name="Miejscowosc_mieszkanie" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="miasto" Type="varchar" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="Pesel_w" Type="nchar" MaxLength="11" Nullable="false" />
+                <Property Name="ID" Type="nchar" MaxLength="10" Nullable="false" />
+                <Property Name="Metraz" Type="real" />
+                <Property Name="Miejscowosc" Type="varchar" MaxLength="50" />
+                <Property Name="Kod" Type="nchar" MaxLength="6" />
+                <Property Name="Adres" Type="varchar" MaxLength="50" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
+        <Function Name="PobierzZnajomych" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Imie" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="ProceduraMieszkanie" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="pesel" Type="nchar" Mode="In" />
+        </Function>
+        <Function Name="szukanie" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="wzorzec" Type="varchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="HurtowniaModelStoreContainer">
+          <EntitySet Name="Mieszkania_domy" EntityType="Self.Mieszkania_domy" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Znajomi" EntityType="Self.Znajomi" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Mieszkania_domy_Znajomi" Association="Self.FK_Mieszkania_domy_Znajomi">
+            <End Role="Znajomi" EntitySet="Znajomi" />
+            <End Role="Mieszkania_domy" EntitySet="Mieszkania_domy" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="HurtowniaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Mieszkania_domy">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="Pesel_w" Type="String" MaxLength="11" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="ID" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Metraz" Type="Single" />
+          <Property Name="Miejscowosc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Kod" Type="String" MaxLength="6" FixedLength="true" Unicode="true" />
+          <Property Name="Adres" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Znajomi" Relationship="Self.FK_Mieszkania_domy_Znajomi" FromRole="Mieszkania_domy" ToRole="Znajomi" />
+        </EntityType>
+        <EntityType Name="Znajomi">
+          <Key>
+            <PropertyRef Name="Pesel" />
+          </Key>
+          <Property Name="Nazwisko" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Imie" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="Pesel" Type="String" MaxLength="11" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Data_urodzenia" Type="DateTime" Precision="0" />
+          <Property Name="Majatek" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Miasto" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Mieszkania_domy" Relationship="Self.FK_Mieszkania_domy_Znajomi" FromRole="Znajomi" ToRole="Mieszkania_domy" />
+        </EntityType>
+        <Association Name="FK_Mieszkania_domy_Znajomi">
+          <End Role="Znajomi" Type="Self.Znajomi" Multiplicity="1" />
+          <End Role="Mieszkania_domy" Type="Self.Mieszkania_domy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Znajomi">
+              <PropertyRef Name="Pesel" />
+            </Principal>
+            <Dependent Role="Mieszkania_domy">
+              <PropertyRef Name="Pesel_w" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="HurtowniaEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Mieszkania_domy" EntityType="Self.Mieszkania_domy" />
+          <EntitySet Name="Znajomi" EntityType="Self.Znajomi" />
+          <AssociationSet Name="FK_Mieszkania_domy_Znajomi" Association="Self.FK_Mieszkania_domy_Znajomi">
+            <End Role="Znajomi" EntitySet="Znajomi" />
+            <End Role="Mieszkania_domy" EntitySet="Mieszkania_domy" />
+          </AssociationSet>
+          <FunctionImport Name="Miejscowosc_mieszkanie" IsComposable="true" ReturnType="Collection(HurtowniaModel.Miejscowosc_mieszkanie_Result)">
+            <Parameter Name="miasto" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PobierzZnajomych" ReturnType="Collection(HurtowniaModel.PobierzZnajomych_Result)">
+            <Parameter Name="Imie" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ProceduraMieszkanie" ReturnType="Collection(HurtowniaModel.ProceduraMieszkanie_Result)">
+            <Parameter Name="pesel" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="szukanie" ReturnType="Collection(HurtowniaModel.szukanie_Result)">
+            <Parameter Name="wzorzec" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="Miejscowosc_mieszkanie_Result">
+          <Property Type="String" Name="Pesel_w" Nullable="false" MaxLength="11" />
+          <Property Type="String" Name="ID" Nullable="false" MaxLength="10" />
+          <Property Type="Single" Name="Metraz" Nullable="true" />
+          <Property Type="String" Name="Miejscowosc" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Kod" Nullable="true" MaxLength="6" />
+          <Property Type="String" Name="Adres" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="PobierzZnajomych_Result">
+          <Property Type="String" Name="Nazwisko" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Imie" Nullable="true" MaxLength="25" />
+          <Property Type="String" Name="Pesel" Nullable="false" MaxLength="11" />
+          <Property Type="DateTime" Name="Data_urodzenia" Nullable="true" />
+          <Property Type="Decimal" Name="Majatek" Nullable="true" Precision="19" />
+          <Property Type="String" Name="Miasto" Nullable="true" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="ProceduraMieszkanie_Result">
+          <Property Type="String" Name="Pesel_w" Nullable="false" MaxLength="11" />
+          <Property Type="String" Name="ID" Nullable="false" MaxLength="10" />
+          <Property Type="Single" Name="Metraz" Nullable="true" />
+          <Property Type="String" Name="Miejscowosc" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Kod" Nullable="true" MaxLength="6" />
+          <Property Type="String" Name="Adres" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="szukanie_Result">
+          <Property Type="String" Name="Nazwisko" Nullable="true" MaxLength="25" />
+          <Property Type="String" Name="Imie" Nullable="true" MaxLength="25" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="HurtowniaModelStoreContainer" CdmEntityContainer="HurtowniaEntities">
+          <EntitySetMapping Name="Mieszkania_domy">
+            <EntityTypeMapping TypeName="HurtowniaModel.Mieszkania_domy">
+              <MappingFragment StoreEntitySet="Mieszkania_domy">
+                <ScalarProperty Name="Pesel_w" ColumnName="Pesel_w" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Metraz" ColumnName="Metraz" />
+                <ScalarProperty Name="Miejscowosc" ColumnName="Miejscowosc" />
+                <ScalarProperty Name="Kod" ColumnName="Kod" />
+                <ScalarProperty Name="Adres" ColumnName="Adres" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Znajomi">
+            <EntityTypeMapping TypeName="HurtowniaModel.Znajomi">
+              <MappingFragment StoreEntitySet="Znajomi">
+                <ScalarProperty Name="Nazwisko" ColumnName="Nazwisko" />
+                <ScalarProperty Name="Imie" ColumnName="Imie" />
+                <ScalarProperty Name="Pesel" ColumnName="Pesel" />
+                <ScalarProperty Name="Data_urodzenia" ColumnName="Data_urodzenia" />
+                <ScalarProperty Name="Majatek" ColumnName="Majatek" />
+                <ScalarProperty Name="Miasto" ColumnName="Miasto" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Miejscowosc_mieszkanie" FunctionName="HurtowniaModel.Store.Miejscowosc_mieszkanie">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="HurtowniaModel.Miejscowosc_mieszkanie_Result">
+                <ScalarProperty Name="Pesel_w" ColumnName="Pesel_w" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Metraz" ColumnName="Metraz" />
+                <ScalarProperty Name="Miejscowosc" ColumnName="Miejscowosc" />
+                <ScalarProperty Name="Kod" ColumnName="Kod" />
+                <ScalarProperty Name="Adres" ColumnName="Adres" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PobierzZnajomych" FunctionName="HurtowniaModel.Store.PobierzZnajomych">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="HurtowniaModel.PobierzZnajomych_Result">
+                <ScalarProperty Name="Nazwisko" ColumnName="Nazwisko" />
+                <ScalarProperty Name="Imie" ColumnName="Imie" />
+                <ScalarProperty Name="Pesel" ColumnName="Pesel" />
+                <ScalarProperty Name="Data_urodzenia" ColumnName="Data_urodzenia" />
+                <ScalarProperty Name="Majatek" ColumnName="Majatek" />
+                <ScalarProperty Name="Miasto" ColumnName="Miasto" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ProceduraMieszkanie" FunctionName="HurtowniaModel.Store.ProceduraMieszkanie">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="HurtowniaModel.ProceduraMieszkanie_Result">
+                <ScalarProperty Name="Pesel_w" ColumnName="Pesel_w" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Metraz" ColumnName="Metraz" />
+                <ScalarProperty Name="Miejscowosc" ColumnName="Miejscowosc" />
+                <ScalarProperty Name="Kod" ColumnName="Kod" />
+                <ScalarProperty Name="Adres" ColumnName="Adres" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="szukanie" FunctionName="HurtowniaModel.Store.szukanie">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="HurtowniaModel.szukanie_Result">
+                <ScalarProperty Name="Nazwisko" ColumnName="Nazwisko" />
+                <ScalarProperty Name="Imie" ColumnName="Imie" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
